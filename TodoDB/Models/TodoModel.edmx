@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TodoDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TodoDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Items">
           <Key>
             <PropertyRef Name="ItemId" />
@@ -14,6 +14,7 @@
           <Property Name="ListID" Type="int" Nullable="false" />
           <Property Name="DueDateTime" Type="datetime" />
           <Property Name="Details" Type="nvarchar(max)" />
+          <Property Name="IsDone" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Lists">
           <Key>
@@ -42,8 +43,7 @@
             <End Role="Items" EntitySet="Items" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TodoDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -57,6 +57,7 @@
           <Property Name="DueDateTime" Type="DateTime" Precision="3" />
           <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="List" Relationship="Self.FK_Items_Lists" FromRole="Items" ToRole="Lists" />
+          <Property Name="IsDone" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="List">
           <Key>
@@ -95,6 +96,7 @@
           <EntitySetMapping Name="Items">
             <EntityTypeMapping TypeName="TodoDBModel.Item">
               <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="IsDone" ColumnName="IsDone" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="ListID" ColumnName="ListID" />

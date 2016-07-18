@@ -48,7 +48,7 @@ namespace TodoDB.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ItemId,ItemName,ListID,DueDateTime,Details")] Item item)
+        public ActionResult Create([Bind(Include = "ItemId,ItemName,ListID,DueDateTime,Details,IsDone")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace TodoDB.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ItemId,ItemName,ListID,DueDateTime,Details")] Item item)
+        public ActionResult Edit([Bind(Include = "ItemId,ItemName,ListID,DueDateTime,Details,IsDone")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -93,6 +93,35 @@ namespace TodoDB.Controllers
             ViewBag.ListID = new SelectList(db.Lists, "ListId", "ListTitle", item.ListID);
             return View(item);
         }
+
+        public ActionResult ToggleDone(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = db.Items.Find(id);
+
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            item.IsDone = true;
+
+            if (item.IsDone)
+            {
+                item.IsDone = false;
+            }
+            else
+            {
+                item.IsDone = true;
+            }
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            
+        }
+
 
         // GET: Items/Delete/5
         public ActionResult Delete(int? id)
